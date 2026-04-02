@@ -1,0 +1,30 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper Functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() &&
+             (request.auth.token.email == "vugar.pr@gmail.com" && request.auth.token.get('email_verified', false) == true);
+    }
+
+    match /test/connection {
+      allow read: if true;
+    }
+
+    match /users/{userId} {
+      allow read, write: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+    }
+
+    match /sessions/{sessionId} {
+      allow create: if isAuthenticated();
+      allow read, update, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    match /saved_projects/{projectId} {
+      allow create: if isAuthenticated();
+      allow read, update, delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }

@@ -1,0 +1,54 @@
+{
+  "entities": {
+    "Session": {
+      "title": "Session",
+      "description": "A design session containing multiple artifacts",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "prompt": { "type": "string" },
+        "timestamp": { "type": "number" },
+        "userId": { "type": "string" },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "styleName": { "type": "string" },
+              "html": { "type": "string" },
+              "status": { "type": "string", "enum": ["streaming", "complete", "error"] }
+            }
+          }
+        }
+      },
+      "required": ["id", "prompt", "timestamp", "userId", "artifacts"]
+    },
+    "SavedProject": {
+      "title": "Saved Project",
+      "description": "A design artifact saved by the user",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "originalPrompt": { "type": "string" },
+        "styleName": { "type": "string" },
+        "html": { "type": "string" },
+        "category": { "type": "string" },
+        "styleDescription": { "type": "string" },
+        "timestamp": { "type": "number" }
+      },
+      "required": ["id", "userId", "originalPrompt", "styleName", "html", "category", "styleDescription", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/sessions/{sessionId}": {
+      "schema": "Session",
+      "description": "User design sessions"
+    },
+    "/saved_projects/{projectId}": {
+      "schema": "SavedProject",
+      "description": "User saved designs"
+    }
+  }
+}
