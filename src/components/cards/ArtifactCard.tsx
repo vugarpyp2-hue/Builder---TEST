@@ -59,7 +59,7 @@ const ArtifactCard = ({
             setExportProgress({ active: true, progress: step.p, status: step.s });
         }
 
-        const result = await exportToWebflow(artifact);
+        const result = exportToWebflow(artifact);
         
         if (!result.valid) {
             console.error("Export validation failed:", result.errors);
